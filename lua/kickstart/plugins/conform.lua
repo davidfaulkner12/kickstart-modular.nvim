@@ -5,12 +5,12 @@ return {
     cmd = { 'ConformInfo' },
     keys = {
       {
-        '<leader>f',
+        '<leader>rf',
         function()
           require('conform').format { async = true, lsp_format = 'fallback' }
         end,
         mode = '',
-        desc = '[F]ormat buffer',
+        desc = '[R]un [F]ormat buffer',
       },
     },
     opts = {
@@ -31,6 +31,13 @@ return {
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        -- TODO davidwf: These were in my previous config but maybe not needed in latest version
+        -- go = { 'go fmt' },
+        -- javascript = { 'npx prettier' },
+        -- typescript = { 'npx prettier' },
+        -- html = { 'npx prettier' },
+        -- css = { 'npx prettier' },
+
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --

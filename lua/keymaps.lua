@@ -1,12 +1,16 @@
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
--- Clear highlights on search when pressing <Esc> in normal mode
+-- Use 'jj' to escape
+vim.keymap.set('i', 'jj', '<ESC>')
+
+-- Clear highlights on search when pressing <Leader>+<Space> in normal mode
 --  See `:help hlsearch`
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+vim.keymap.set('n', '<leader> ', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+vim.keymap.set('n', '<leader>td', vim.diagnostic.open_float, { desc = '[T]oggle [D]iagnostic' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -50,5 +54,28 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     vim.hl.on_yank()
   end,
 })
+
+-- Emacs shortcuts in insert mode
+vim.keymap.set('', '<C-a>', '<ESC>^')
+vim.keymap.set('i', '<C-a>', '<ESC>I')
+vim.keymap.set('', '<C-e>', '<ESC>$')
+vim.keymap.set('i', '<C-e>', '<ESC>A')
+vim.keymap.set('i', '<C-f>', '<ESC><Space>Wi')
+vim.keymap.set('i', '<C-b>', '<ESC>Bi')
+
+-- Keep selection on indent
+vim.keymap.set('v', '>', '>gv', { noremap = true })
+vim.keymap.set('v', '<', '<gv', { noremap = true })
+
+-- Allow awesome copy-paste
+if vim.g.neovide then
+  vim.o.guifont = 'Monoid:h12'
+
+  vim.keymap.set('n', '<D-s>', ':w<CR>') -- Save
+  vim.keymap.set('v', '<D-c>', '"+y') -- Copy
+  vim.keymap.set({ 'n', 'v' }, '<D-v>', '"+P') -- Paste normal and visual mode
+  vim.keymap.set({ 'i', 'c' }, '<D-v>', '<C-R>+') -- Paste insert and command mode
+  vim.keymap.set('t', '<D-v>', [[<C-\><C-N>"+P]]) -- Paste terminal mode
+end
 
 -- vim: ts=2 sts=2 sw=2 et

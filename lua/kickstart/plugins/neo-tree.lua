@@ -10,15 +10,37 @@ return {
     'MunifTanjim/nui.nvim',
   },
   lazy = false,
+  init = function()
+    vim.api.nvim_create_autocmd('BufEnter', {
+      -- make a group to be able to delete it later
+      group = vim.api.nvim_create_augroup('NeoTreeInit', { clear = true }),
+      callback = function()
+        local f = vim.fn.expand '%:p'
+        if vim.fn.isdirectory(f) ~= 0 then
+          vim.cmd('Neotree dir=' .. f)
+          -- neo-tree is loaded now, delete the init autocmd
+          vim.api.nvim_clear_autocmds { group = 'NeoTreeInit' }
+        end
+      end,
+    })
+  end,
   keys = {
-    { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
+    { '<Leader>f', ':Neotree reveal toggle=true<CR>', desc = 'Neotree reveal', silent = true },
+    { '<Leader>v', ':Neotree reveal<CR>', desc = 'Neotree reveal current file', silent = true },
   },
   opts = {
+    close_if_last_window = true,
+    popup_border_style = 'rounded',
     filesystem = {
-      window = {
-        mappings = {
-          ['\\'] = 'close_window',
+      filtered_items = {
+        hide_dotfiles = false,
+        hide_gitignored = true,
+        hide_by_name = {
+          '.github',
+          'package-lock.json',
+          '.Trash',
         },
+        never_show = { '.git' },
       },
     },
   },
